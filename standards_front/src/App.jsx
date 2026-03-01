@@ -1,33 +1,24 @@
-import { useRef } from 'react'
-import './App.css'
-import SendEmail from './components/SendEmail'
-import Notifications from './components/Notifications'
+import './App.css';
+import SendEmail from './components/SendEmail';
 import WeatherStatus from './components/WeatherStatus';
 
+/**
+ * Root application component for the Standards front-end demo.
+ *
+ * Renders the `SendEmail` and `WeatherStatus` widgets side-by-side.
+ *
+ * @returns {JSX.Element} The main application layout.
+ */
 function App() {
-  const notificationsRef = useRef();
-
-  // Example: show notification on login (future use)
-  const handleLogin = () => {
-    notificationsRef.current.show({
-      severity: "success",
-      summary: "Login",
-      detail: "Logged in successfully!",
-      life: 3000
-    });
-  };
-
   return (
     <>
       <h1>Welcome!</h1>
-      {/* <button onClick={handleLogin}>Simulate Login</button> */}
-      <div style={{display: 'flex', justifyContent: "space-evenly", width: '100%'}}>
-        <SendEmail notify={notificationsRef} />
+      <div style={{ display: 'flex', justifyContent: 'space-evenly', width: '100%' }}>
+        <SendEmail skipApi={true} />
         <WeatherStatus />
       </div>
-      <Notifications ref={notificationsRef} />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

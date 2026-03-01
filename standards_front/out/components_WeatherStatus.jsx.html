@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/WeatherStatus.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/WeatherStatus.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState } from "react";
+import PropTypes from "prop-types";
+import { InputText } from "primereact/inputtext";
+import { Button } from "primereact/button";
+import { Card } from "primereact/card";
+import { useEffect } from "react";
+
+/**
+ * Displays current weather information fetched from the Standards API.
+ *
+ * The component calls `GET /weather` on mount and renders different amounts
+ * of detail depending on the `infoSize` prop.
+ *
+ * @param {Object} props - Component props.
+ * @param {"large" | "medium" | "small"} [props.infoSize="large"]
+ *  Controls how much weather detail is rendered.
+ * @returns {JSX.Element} Weather card with icon and details.
+ */
+const WeatherStatus = ({ infoSize = "large" }) => {
+    const [city, setCity] = useState("");
+    const [weather, setWeather] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+
+    const fetchWeather = async () => {
+        setLoading(true);
+        setError("");
+        setWeather(null);
+        try {
+            const response = await fetch(`http://localhost:3000/weather`);
+            if (!response.ok) {
+                throw new Error("Failed to fetch weather");
+            }
+            const data = await response.json();
+            setWeather(data);
+        } catch (err) {
+            setError("Could not fetch weather data.");
+        }
+        setLoading(false);
+    };
+
+    useEffect(() => {
+        // Fetch default weather data when component mounts
+        fetchWeather();
+    }, []);
+
+    return (
+        &lt;div style={{ maxWidth: 400, margin: "2rem auto" }}>
+            {/* &lt;span className="p-float-label" style={{ width: "100%" }}>
+                &lt;InputText
+                    id="city"
+                    value={city}
+                    onChange={e => setCity(e.target.value)}
+                    style={{ width: "100%" }}
+                />
+                &lt;label htmlFor="city">City&lt;/label>
+            &lt;/span>
+            &lt;br />&lt;br />
+            &lt;Button label={loading ? "Loading..." : "Get Weather"} onClick={fetchWeather} disabled={loading || !city} />
+            &lt;br />&lt;br /> */}
+            {error &amp;&amp; &lt;div style={{ color: "red" }}>{error}&lt;/div>}
+            {weather &amp;&amp; infoSize === "large" &amp;&amp; weather.weather &amp;&amp; (
+                &lt;Card title={weather.name}>
+                    &lt;div>
+                        &lt;img
+                            src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
+                            alt={weather.weather[0].description}
+                        />
+                        &lt;h3>{weather.weather[0].main}&lt;/h3>
+                        &lt;p>{weather.weather[0].description}&lt;/p>
+                        &lt;p>Temperature: {weather.main.temp}°C&lt;/p>
+                        &lt;p>Feels like: {weather.main.feels_like}°C&lt;/p>
+                        &lt;p>Humidity: {weather.main.humidity}%&lt;/p>
+                        &lt;p>Pressure: {weather.main.pressure} hPa&lt;/p>
+                    &lt;/div>
+                &lt;/Card>
+            )}
+            {weather &amp;&amp; infoSize === "medium" &amp;&amp; weather.weather &amp;&amp; (
+                &lt;Card title={weather.name}>
+                    &lt;div>
+                        &lt;img
+                            src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
+                            alt={weather.weather[0].description}
+                        />
+                        &lt;h3>{weather.weather[0].main}&lt;/h3>
+                        &lt;p>Temperature: {weather.main.temp}°C&lt;/p>
+                        &lt;p>Feels like: {weather.main.feels_like}°C&lt;/p>
+                        &lt;p>Humidity: {weather.main.humidity}%&lt;/p>
+                    &lt;/div>
+                &lt;/Card>
+            )}
+            {weather &amp;&amp; infoSize === "small" &amp;&amp; weather.weather &amp;&amp; (
+                &lt;Card title={weather.name}>
+                    &lt;div>
+                        &lt;img
+                            src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
+                            alt={weather.weather[0].description}
+                        />
+                        &lt;h3>{weather.weather[0].main}&lt;/h3>
+                        &lt;p>Temperature: {weather.main.temp}°C&lt;/p>
+                    &lt;/div>
+                &lt;/Card>
+            )}
+
+        &lt;/div>
+    );
+};
+
+
+WeatherStatus.propTypes = {
+    infoSize: PropTypes.oneOf(["large", "medium", "small"]),
+};
+
+export default WeatherStatus;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#Notifications">Notifications</a></li><li><a href="global.html#SendEmail">SendEmail</a></li><li><a href="global.html#WeatherStatus">WeatherStatus</a></li><li><a href="global.html#show">show</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Mon Mar 02 2026 01:22:46 GMT+0200 (за східноєвропейським стандартним часом)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

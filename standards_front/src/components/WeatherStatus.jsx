@@ -1,10 +1,22 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Card } from "primereact/card";
 import { useEffect } from "react";
 
-const WeatherStatus = () => {
+/**
+ * Displays current weather information fetched from the Standards API.
+ *
+ * The component calls `GET /weather` on mount and renders different amounts
+ * of detail depending on the `infoSize` prop.
+ *
+ * @param {Object} props - Component props.
+ * @param {"large" | "medium" | "small"} [props.infoSize="large"]
+ *  Controls how much weather detail is rendered.
+ * @returns {JSX.Element} Weather card with icon and details.
+ */
+const WeatherStatus = ({ infoSize = "large" }) => {
     const [city, setCity] = useState("");
     const [weather, setWeather] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -47,7 +59,7 @@ const WeatherStatus = () => {
             <Button label={loading ? "Loading..." : "Get Weather"} onClick={fetchWeather} disabled={loading || !city} />
             <br /><br /> */}
             {error && <div style={{ color: "red" }}>{error}</div>}
-            {weather && weather.weather && (
+            {weather && infoSize === "large" && weather.weather && (
                 <Card title={weather.name}>
                     <div>
                         <img
@@ -63,8 +75,40 @@ const WeatherStatus = () => {
                     </div>
                 </Card>
             )}
+            {weather && infoSize === "medium" && weather.weather && (
+                <Card title={weather.name}>
+                    <div>
+                        <img
+                            src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
+                            alt={weather.weather[0].description}
+                        />
+                        <h3>{weather.weather[0].main}</h3>
+                        <p>Temperature: {weather.main.temp}°C</p>
+                        <p>Feels like: {weather.main.feels_like}°C</p>
+                        <p>Humidity: {weather.main.humidity}%</p>
+                    </div>
+                </Card>
+            )}
+            {weather && infoSize === "small" && weather.weather && (
+                <Card title={weather.name}>
+                    <div>
+                        <img
+                            src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
+                            alt={weather.weather[0].description}
+                        />
+                        <h3>{weather.weather[0].main}</h3>
+                        <p>Temperature: {weather.main.temp}°C</p>
+                    </div>
+                </Card>
+            )}
+
         </div>
     );
+};
+
+
+WeatherStatus.propTypes = {
+    infoSize: PropTypes.oneOf(["large", "medium", "small"]),
 };
 
 export default WeatherStatus;
