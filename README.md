@@ -42,7 +42,6 @@ npm run jsdoc        # згенерувати JSDoc-документацію (п
 - **Swagger/OpenAPI**:
   - Вмикається в `servingRn.js`, UI за адресою `/api-docs`.
 - **JSDoc**:
-  - API: генерується у `standards_api/out/`.
   - Frontend: конфіг `standards_front/jsdoc.json`, вихід у `standards_front/out/`.
 
 ## Ліцензія
